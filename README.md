@@ -18,3 +18,12 @@ The sample rewrites are deterministic, not AI-generated. Free-text recipient pre
 
 ## Development and validation
 Buildless index.html, published by .github/workflows/pages.yml. Never commit API credentials. Syntax and generator checks passed for wording variants, retained key facts, length and formatting. Browser QA covered simulated recording completion, recipient changes, another wording, theme toggle and local saving.
+
+## Simplified layout and transcript modes
+The home screen has a one-line slogan, a geometrically centred recording button and minimal labels. App colours use a base/accent pair, with per-theme colour pickers and navy/pink, navy/yellow and black/orange presets. Choices persist in localStorage.
+
+Summary tone choices now include Friendly, Playful, Blunt and Thoughtful. Tidy full transcript preserves the complete wording while splitting it into readable paragraphs. Group by topic reorganises the supplied sample into Saturday plans, mug idea, book, dog and closing sections; every sentence is retained. Emoji and bullet choices apply to tidy output too. Try another layout changes paragraph size without rewriting words. The original transcript stays separate.
+
+Recipient Add/Edit forms include explicit defaults for output mode, length, tone, focus, emojis, bullets, grouping and tangents. Save style stores the currently selected bubbles; temporary message changes no longer silently overwrite a recipient’s defaults. Written preferences are saved but will only influence rewriting after AI is connected.
+
+The demo can split pasted text into paragraphs, but automatic topic grouping for arbitrary text still needs AI. All new output is still local and no microphone is used. Validation covered complete sample text preservation, every grouped sentence, alternate layouts, palette switching and adding a recipient with defaults.
