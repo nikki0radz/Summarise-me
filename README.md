@@ -3,19 +3,18 @@ A way to make voicenotes less annoying.
 
 Live draft: https://nikki0radz.github.io/Summarise-me/
 
-## Draft features
-- Fictional three-minute example transcript with local, deterministic rewrites.
-- Recipient profiles with remembered length, tone, focus, formatting, emoji and tangent settings.
-- Editable summaries and full transcripts, copy to clipboard, real microphone capture and audio playback.
-- IndexedDB storage; saved notes expire after seven days unless kept. Cleanup happens on the next app visit/use. No app lock or login.
+## Current experience
+Record-first home screen with a large coral microphone button, purple accents, dark mode by default and a remembered light/dark toggle. Saved notes sit beneath recording.
 
-## Current limitations
-Automatic transcription and AI rewriting are not connected. The example demonstrates the settings using prepared rules; pasted custom transcripts must be edited manually. Free-text profile preferences are saved for future AI integration; the demo responds to structured settings. Audio and text are not uploaded. Recordings stop when the app is backgrounded; save to preserve them across reloads.
+Tap Record for a five-second pretend recording with an animated waveform and timer. Tap again to finish early, or Cancel to return home. Completing it opens the existing fictional three-minute transcript and an editable message. No microphone permission is requested and no real audio is captured in this version.
 
-Data stays on the current browser, is not encrypted, and is lost if browser storage is cleared. Keep preserves a saved note until deleted. Expired notes are removed when the app is next opened/used, rather than by a closed-app background task.
+Recipient, length, tone, focus, emoji, bullet and tangent bubbles stay visible and update the example summary immediately. Try another wording cycles through three prepared variations per configuration. Undo restores the last message, including manual edits. Copy and local saving are supported. Full transcript is in an expandable section.
 
-## Development
-Buildless single-page app in index.html. Open it on HTTPS for microphone support. GitHub Pages deployment is configured in .github/workflows/pages.yml. A future AI backend must hold the API key on the server; never commit secrets into this public repository.
+## Local data
+Saved notes and recipient profiles use the same IndexedDB store as the first draft. Existing saved notes and attached audio remain readable. Unkept notes expire seven days after creation and are removed on next app visit/use; Keep preserves until deleted. Data is browser-local, not encrypted, and clearing browser storage removes it. Unsaved drafts are not persisted across reloads. There is no account or app lock.
 
-## Validation
-JavaScript syntax checked. Browser checks covered recipient switching, updated output, separate transcript view, saving locally, and Keep status. Real microphone capture was not tested in the remote browser.
+## Demo boundary
+The sample rewrites are deterministic, not AI-generated. Free-text recipient preferences are retained for future AI integration; the demo uses the profile’s structured settings. Edited custom transcripts can be saved and manually summarized but cannot be automatically rewritten. Real recording, transcription and AI summarization will be connected later. No transcript or audio is uploaded.
+
+## Development and validation
+Buildless index.html, published by .github/workflows/pages.yml. Never commit API credentials. Syntax and generator checks passed for wording variants, retained key facts, length and formatting. Browser QA covered simulated recording completion, recipient changes, another wording, theme toggle and local saving.
