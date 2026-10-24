@@ -37,10 +37,13 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 @keyframes inviteGlow{0%,100%{box-shadow:0 0 20px color-mix(in srgb,var(--purple) 24%,transparent),0 0 0 0 color-mix(in srgb,var(--purple) 12%,transparent),inset 0 1px 0 #ffffff45}50%{box-shadow:0 0 48px color-mix(in srgb,var(--purple) 48%,transparent),0 0 0 13px color-mix(in srgb,var(--purple) 6%,transparent),inset 0 1px 0 #ffffff45}}
 #discardCaptureDialog{width:min(90vw,390px);text-align:center;background:radial-gradient(ellipse at top,color-mix(in srgb,var(--purple) 12%,transparent),transparent 70%),var(--panel);padding:28px}#discardCaptureDialog .actions{display:grid;grid-template-columns:1fr;gap:10px}#discardCaptureDialog button{font-size:.8125rem}#confirmDiscardCapture{border-color:color-mix(in srgb,var(--purple) 45%,var(--line));background:transparent}.discard-symbol{display:grid;place-items:center;width:50px;height:50px;margin:0 auto 18px;background:color-mix(in srgb,var(--purple) 12%,transparent);border-radius:50%;color:var(--purple);font:1.6rem system-ui}
 @media(prefers-reduced-motion:reduce){#home .record-card:not(.recording) .orb{animation:none;box-shadow:0 0 28px color-mix(in srgb,var(--purple) 30%,transparent)}}
+</style><style>
+.home-start{min-height:calc(100svh - 90px);padding-bottom:48px;display:flex;flex-direction:column}.home-recipients{width:100%;max-width:570px;margin:35px auto 0;text-align:center}.home-recipients h2{font-size:.8125rem;color:var(--muted);margin:0 0 15px;font-weight:500}.home-recipients .chips{justify-content:center;gap:10px}.home-recipients .chip{padding:12px 22px;min-width:90px}.home-recipients .chip[aria-pressed=true]{box-shadow:0 4px 22px color-mix(in srgb,var(--purple) 18%,transparent)}#home .recent{margin:0 auto;padding-top:24px;border-top:1px solid var(--line);width:100%;max-width:650px}#editor .backrow{margin-bottom:12px}
 </style></head><body>
 <header class="header"><div class="brand"><b class="brand-mark">≋</b>summarise me<span>.</span></div><div class="header-actions"><button class="icon" id="colours" aria-label="App settings">⚙</button></div></header>
 <main>
 <section id="home">
+<div class="home-start">
 <div class="hero"><span class="eyebrow">A little space to spill your thoughts</span><h1>Say it all. <br><em>Send the good bits.</em></h1><p class="sub">For the “quick voice note” that’s never quick.</p><span class="doodle" aria-hidden="true">✳</span><span class="spark" aria-hidden="true">✧</span></div>
 <div class="record-card" id="recordCard"><div class="record-top"><span class="eyebrow" id="recordState"></span><span class="timer" id="timer">00:00</span></div>
 <div class="record-target"><button class="orb" id="record" aria-label="Start recording"><svg id="mic" viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="5" width="14" height="25" rx="7"></rect><path d="M11 23v2a13 13 0 0 0 26 0v-2M24 38v7M17 45h14"></path></svg><span id="stopIcon" hidden>✓</span></button></div>
@@ -48,11 +51,12 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 <div class="wave" aria-hidden="true"><i style="--h:8px;--d:0s"></i><i style="--h:16px;--d:.1s"></i><i style="--h:26px;--d:.2s"></i><i style="--h:19px;--d:.3s"></i><i style="--h:29px;--d:.1s"></i><i style="--h:21px;--d:.2s"></i><i style="--h:12px;--d:.3s"></i><i style="--h:22px;--d:0s"></i><i style="--h:9px;--d:.2s"></i></div>
 <button id="cancelRecord" class="plain" hidden>Cancel recording</button>
 </div>
+<section class="home-recipients" aria-labelledby="homeRecipientTitle"><h2 id="homeRecipientTitle">Who’s it for?</h2><div id="homePeople" class="chips" role="group" aria-label="Choose a recipient before recording"></div></section></div>
 <section class="recent"><div class="section-head"><h2>Saved messages</h2></div><div id="history"></div></section>
 </section>
 <section id="editor" hidden>
 <div class="backrow"><button class="plain" id="back">← Back to your space</button><span class="badge">Voice note</span></div>
-<div class="edit-intro"><span class="eyebrow done">A little less ramble, still all you</span><h1 class="step-title">Your message</h1><p class="sub">Tap a few bubbles. Your message changes as you go.</p></div>
+
 <div class="editor-grid">
 <div class="editor-main"><div class="card" id="outputCard"><div class="output-head"><h2>Your message</h2><span id="outputLabel">For Owen</span></div>
 <textarea class="summary" id="summary" aria-label="Edit your summary" placeholder="Your message will appear here…"></textarea>
@@ -126,7 +130,7 @@ async function persist(){if(!storageOK)throw Error('Storage is unavailable on th
 async function prune(){const now=Date.now(),old=notes.length;notes=notes.filter(n=>n.keep||now-n.created<7*DAY);if(notes.length!==old)await persist()}
 function storageNotice(error){tell('Couldn’t save on this browser. Your current message is still here. '+error.message)}
 function count(){const text=$('summary').value.trim();$('count').textContent=(text?text.split(/\s+/).length:0)+' words';$('saveStatus').textContent=loadedId?'Saved version · tap to update':'7 days, unless you keep it'}
-function renderProfiles(){const wrap=$('people');wrap.replaceChildren();for(const p of profiles){const b=document.createElement('button');b.className='chip';b.textContent=p.name;b.setAttribute('aria-pressed',p.id===person);b.onclick=()=>{person=p.id;settings={...p.settings};version=0;renderProfiles();renderSettings();rewrite();};wrap.append(b)}$('profileHint').textContent=profiles.find(p=>p.id===person)?.notes||''}
+function renderProfiles(){for(const id of ['people','homePeople']){const wrap=$(id);wrap.replaceChildren();for(const p of profiles){const b=document.createElement('button');b.type='button';b.className='chip';b.textContent=p.name;b.setAttribute('aria-pressed',String(p.id===person));b.onclick=()=>{person=p.id;settings={...p.settings};version=0;renderProfiles();renderSettings();if(!$('editor').hidden)rewrite()};wrap.append(b)}}$('profileHint').textContent=profiles.find(p=>p.id===person)?.notes||''}
 function renderSettings(){$('again').textContent=settings.mode==='tidy'?'↻ Try another layout':'↻ Try another wording';document.querySelectorAll('.summary-only').forEach(e=>e.hidden=settings.mode==='tidy');for(const key of ['mode','length','tone','focus'])document.querySelectorAll('#'+key+' button[data-value]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.value===(settings[key]||(key==='mode'?'summary':''))));for(const key of ['emoji','tangents','groupTopics'])$(key).setAttribute('aria-pressed',!!settings[key]);$('bullets').setAttribute('aria-pressed',settings.format==='bullets');$('outputLabel').textContent='For '+(profiles.find(p=>p.id===person)?.name||'you')}
 function generate(){
 if(settings.mode==='tidy')return tidyTranscript();
