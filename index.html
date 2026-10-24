@@ -16,7 +16,7 @@ html[data-theme=light]{color-scheme:light;--bg:#f7f0ed;--panel:#fffaf5;--panel2:
 </style>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Dancing+Script:wght@400;600;700&family=Libre+Baskerville:wght@400;700&family=UnifrakturCook:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700&family=Special+Elite&family=Caveat:wght@400;600;700&family=Dancing+Script:wght@400;600;700&family=Libre+Baskerville:wght@400;700&family=UnifrakturCook:wght@700&display=swap');
 html{font-size:calc(16px * var(--text-scale,1))}
 .editor-grid{grid-template-columns:minmax(0,1fr);align-items:start}.editor-main{min-width:0}.summary-settings{min-width:0}.summary-settings h2{margin-bottom:0}
 #coloursDialog{max-height:90dvh;overflow:auto}#textScale{padding:0;accent-color:var(--purple);min-height:32px}#textScaleValue{float:right;color:var(--ink)}
@@ -30,25 +30,26 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 <section id="home">
 <div class="hero"><span class="eyebrow">A little space to spill your thoughts</span><h1>Say it all. <br><em>Send the good bits.</em></h1><p class="sub">For the “quick voice note” that’s never quick.</p><span class="doodle" aria-hidden="true">✳</span><span class="spark" aria-hidden="true">✧</span></div>
 <div class="record-card" id="recordCard"><div class="record-top"><span class="eyebrow" id="recordState"></span><span class="timer" id="timer">00:00</span></div>
-<div class="record-target"><button class="orb" id="record" aria-label="Start demo recording"><svg id="mic" viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="5" width="14" height="25" rx="7"></rect><path d="M11 23v2a13 13 0 0 0 26 0v-2M24 38v7M17 45h14"></path></svg><span class="stop-icon" id="stopIcon" hidden></span></button></div>
+<div class="record-target"><button class="orb" id="record" aria-label="Start recording"><svg id="mic" viewBox="0 0 48 48" aria-hidden="true"><rect x="17" y="5" width="14" height="25" rx="7"></rect><path d="M11 23v2a13 13 0 0 0 26 0v-2M24 38v7M17 45h14"></path></svg><span class="stop-icon" id="stopIcon" hidden></span></button></div>
 <h2 class="record-title" id="recordTitle">Tap to talk</h2><p class="record-hint" id="recordHint">We’ll find the message in the middle of the ramble.</p>
 <div class="wave" aria-hidden="true"><i style="--h:8px;--d:0s"></i><i style="--h:16px;--d:.1s"></i><i style="--h:26px;--d:.2s"></i><i style="--h:19px;--d:.3s"></i><i style="--h:29px;--d:.1s"></i><i style="--h:21px;--d:.2s"></i><i style="--h:12px;--d:.3s"></i><i style="--h:22px;--d:0s"></i><i style="--h:9px;--d:.2s"></i></div>
-<button id="cancelRecord" class="plain" hidden>Cancel demo</button>
-</div><div class="demo-note"><b>Demo · 5 seconds</b><span>Pretend recording · no microphone needed</span></div><p class="tiny" style="text-align:center;margin:8px 0">Try it for a few seconds. We’ll use the sample voice note.</p>
+<button id="cancelRecord" class="plain" hidden>Cancel recording</button>
+</div><div class="demo-note"><b>Record · listen · share</b><span>Audio stays on this device</span></div><p class="tiny" style="text-align:center;margin:8px 0">Record your voice note. Transcription and AI summaries are not connected yet.</p>
 <section class="recent"><div class="section-head"><h2>Saved messages</h2><span class="tiny">7 days · or keep a favourite</span></div><div id="history"></div><p class="footer">Just on this device. No login. No app lock.<br>Unkept notes are cleared after 7 days, next time you open the app.</p></section>
 </section>
 <section id="editor" hidden>
-<div class="backrow"><button class="plain" id="back">← Back to your space</button><span class="badge">✦ Demo transcript</span></div>
+<div class="backrow"><button class="plain" id="back">← Back to your space</button><span class="badge">Voice note</span></div>
 <div class="edit-intro"><span class="eyebrow done">A little less ramble, still all you</span><h1 class="step-title">Your message</h1><p class="sub">Tap a few bubbles. Your message changes as you go.</p></div>
 <div class="editor-grid">
 <div class="editor-main"><div class="card" id="outputCard"><div class="output-head"><h2>Your message</h2><span id="outputLabel">For Owen</span></div>
 <textarea class="summary" id="summary" aria-label="Edit your summary" placeholder="Your message will appear here…"></textarea>
 <div class="output-actions"><button id="again">↻ Try another wording</button><button class="primary" id="copy">Copy message ↗</button><button id="undo" class="plain" hidden>↶ Undo last rewrite</button></div>
 <div class="output-meta"><span class="tiny" id="count"></span><span class="tiny">Your words. Your final edit.</span></div></div>
+<section id="audioTools" class="card" hidden style="margin-top:18px"><h2>Your voice note</h2><audio id="audio" controls hidden></audio><div class="chips" style="margin-top:12px"><button id="shareAudio">Share audio ↗</button><button id="downloadAudio">Download audio ↓</button></div><p class="tiny">Sends the original recording as an audio file.</p></section>
 <p id="notice" role="status" aria-live="polite"></p>
-<details class="card transcript" id="transcriptDetails"><summary>Full transcript <span>Original ramble</span></summary><p class="tiny">The complete example, separate from your edited message.</p><textarea id="transcript" aria-label="Full editable transcript"></textarea><button id="useTranscript" class="plain">Use edited transcript</button><audio id="audio" controls hidden></audio></details>
+<details class="card transcript" id="transcriptDetails"><summary>Full transcript <span>Original ramble</span></summary><p class="tiny">Your transcript, separate from your edited message. Paste text here until transcription is connected.</p><textarea id="transcript" aria-label="Full editable transcript"></textarea><button id="useTranscript" class="plain">Use edited transcript</button></details>
 <div class="section-head" style="margin-top:17px"><button id="save">♡ Save for later</button><span class="tiny" id="saveStatus">7 days, unless you keep it</span></div>
-<p class="footer">Demo output.<br>AI not connected. Nothing is uploaded.</p></div>
+<p class="footer">AI not connected. Audio stays on your device until you share it.</p></div>
 <section class="card summary-settings" aria-label="Summary settings"><h2>Summary settings</h2><div style="height:18px"></div>
 <div class="group"><span class="group-label">What do you need?</span><div class="chips" id="mode"><button class="chip" data-value="summary">Summary</button><button class="chip" data-value="tidy">Tidy full transcript</button></div></div>
 <div class="group"><div class="recipient-head"><span class="group-label">Who’s getting this?</span><div class="profile-tools"><button class="plain" id="editProfile">Edit</button><button class="plain" id="addProfile">+ Add</button><button class="plain" id="saveDefaults">Save style</button></div></div><div id="people" class="chips"></div><p id="profileHint" class="profile-hint"></p></div>
@@ -161,13 +162,30 @@ $('bullets').onclick=()=>changeSetting('format',settings.format==='bullets'?'par
 $('again').onclick=()=>{version++;rewrite()};
 $('undo').onclick=()=>{if(previous!==null){const current=$('summary').value;$('summary').value=previous;previous=current;count();tell('Previous wording restored. Your bubble selections are unchanged.')}};
 $('summary').oninput=()=>{count();$('saveStatus').textContent='Unsaved edits';};
-function clearAudio(){if(audioURL)URL.revokeObjectURL(audioURL);audioURL=null;audioBlob=null;$('audio').hidden=true;$('audio').removeAttribute('src')}
-function setAudio(blob){clearAudio();if(blob){audioBlob=blob;audioURL=URL.createObjectURL(blob);$('audio').src=audioURL;$('audio').hidden=false}}
+function clearAudio(){if(audioURL)URL.revokeObjectURL(audioURL);audioURL=null;audioBlob=null;$('audio').hidden=true;$('audio').removeAttribute('src');$('audioTools').hidden=true}
+function setAudio(blob){clearAudio();if(blob){audioBlob=blob;audioURL=URL.createObjectURL(blob);$('audio').src=audioURL;$('audio').hidden=false;$('audioTools').hidden=false}}
 function showEditor(){ $('home').hidden=true;$('editor').hidden=false;scrollTo({top:0,behavior:'instant'});renderProfiles();renderSettings();count()}
-function resetRecord(){recording=false;finishing=false;clearInterval(ticker);clearTimeout(autoStop);clearTimeout(finishTimer);$('recordCard').classList.remove('recording');$('record').disabled=false;$('record').setAttribute('aria-label','Start demo recording');$('mic').hidden=false;$('stopIcon').hidden=true;$('cancelRecord').hidden=true;$('recordState').textContent='';$('recordTitle').textContent='Tap to talk';$('recordHint').textContent='We’ll find the message in the middle of the ramble.';$('timer').textContent='00:00'}
-function finishDemo(){if(!recording)return;recording=false;finishing=true;clearInterval(ticker);clearTimeout(autoStop);$('record').disabled=true;$('recordState').textContent='Putting your thoughts together…';$('recordTitle').textContent='Preparing transcript…';$('recordHint').textContent='Preparing the sample transcript and your first message.';finishTimer=setTimeout(()=>{resetRecord();loadedId=null;version=0;previous=null;isExample=true;clearAudio();$('transcript').value=example;$('transcriptDetails').open=false;$('summary').value='';$('undo').hidden=true;showEditor();rewrite();tell('Demo complete. Here’s the sample transcript, shaped for '+profiles.find(p=>p.id===person).name+'. Tap bubbles to change it.');},750)}
-$('record').onclick=()=>{if(recording){finishDemo();return}if(finishing)return;recording=true;started=Date.now();$('recordCard').classList.add('recording');$('record').setAttribute('aria-label','Finish demo recording');$('mic').hidden=true;$('stopIcon').hidden=false;$('cancelRecord').hidden=false;$('recordState').textContent='● Pretend recording';$('recordTitle').textContent='Tap to finish';$('recordHint').textContent='Demo only — no microphone is listening. Tap to finish, or wait 5 seconds.';ticker=setInterval(()=>{$('timer').textContent='00:'+String(Math.floor((Date.now()-started)/1000)).padStart(2,'0')},200);autoStop=setTimeout(finishDemo,5000)};
-$('cancelRecord').onclick=resetRecord;
+let recorder=null,micStream=null,requestingMic=false,recordToken=0;
+function releaseMic(){micStream?.getTracks().forEach(t=>t.stop());micStream=null}
+function resetRecord(){recording=false;finishing=false;clearInterval(ticker);$('recordCard').classList.remove('recording');$('record').disabled=false;$('record').setAttribute('aria-label','Start recording');$('mic').hidden=false;$('stopIcon').hidden=true;$('cancelRecord').hidden=true;$('recordState').textContent='';$('recordTitle').textContent='Tap to talk';$('timer').textContent='00:00'}
+function finishRecording(){if(!recording||!recorder)return;recording=false;finishing=true;clearInterval(ticker);$('record').disabled=true;$('recordTitle').textContent='Saving audio…';if(recorder.state!=='inactive')recorder.stop()}
+function cancelRecording(){recordToken++;if(recorder?.state!=='inactive'&&recorder)recorder.stop();releaseMic();resetRecord()}
+$('record').onclick=async()=>{if(recording){finishRecording();return}if(finishing||requestingMic)return;
+if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){$('recordTitle').textContent='Recording needs a supported browser on HTTPS.';return}
+requestingMic=true;const token=++recordToken;$('record').disabled=true;$('recordTitle').textContent='Allow microphone access…';
+try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});if(token!==recordToken){stream.getTracks().forEach(t=>t.stop());return}micStream=stream;
+const mime=['audio/webm;codecs=opus','audio/mp4','audio/ogg;codecs=opus'].find(t=>MediaRecorder.isTypeSupported(t));const active=new MediaRecorder(stream,mime?{mimeType:mime}:{}),chunks=[];recorder=active;
+active.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+active.onerror=()=>{cancelRecording();$('recordTitle').textContent='Recording failed. Please try again.'};
+active.onstop=()=>{if(token!==recordToken)return;releaseMic();resetRecord();const blob=new Blob(chunks,{type:active.mimeType||chunks[0]?.type||'audio/webm'});if(!blob.size){$('recordTitle').textContent='No audio captured. Please try again.';return}loadedId=null;version=0;previous=null;isExample=false;setAudio(blob);$('transcript').value='';$('transcriptDetails').open=false;$('summary').value='';$('summary').placeholder='Your audio is ready below. AI summaries are not connected yet.';$('undo').hidden=true;showEditor();tell('Voice note ready. Play it, share it, download it or save it. Transcription and AI are not connected yet.')};
+active.start(1000);recording=true;started=Date.now();$('record').disabled=false;$('recordCard').classList.add('recording');$('record').setAttribute('aria-label','Finish recording');$('mic').hidden=true;$('stopIcon').hidden=false;$('cancelRecord').hidden=false;$('recordState').textContent='● Recording';$('recordTitle').textContent='Tap to finish';ticker=setInterval(()=>{const secs=Math.floor((Date.now()-started)/1000);$('timer').textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0')},200);
+}catch(e){releaseMic();resetRecord();$('recordTitle').textContent=e.name==='NotAllowedError'?'Microphone access denied. Allow it in this site’s browser settings and try again.':'Could not start recording. Check your microphone and try again.'}finally{requestingMic=false}};
+$('cancelRecord').onclick=cancelRecording;
+function audioFile(){if(!audioBlob?.size)return null;const type=audioBlob.type||'audio/webm',ext=type.includes('mp4')?'m4a':type.includes('ogg')?'ogg':type.includes('wav')?'wav':type.includes('mpeg')?'mp3':'webm';return new File([audioBlob],'voice-note-'+new Date().toISOString().replace(/[:.]/g,'-')+'.'+ext,{type})}
+function downloadAudio(){const file=audioFile();if(!file){tell('No audio is attached to this message.');return}const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download=file.name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);tell('Audio download started.')}
+$('downloadAudio').onclick=downloadAudio;
+$('shareAudio').onclick=async()=>{const file=audioFile();if(!file)return;try{if(navigator.canShare?.({files:[file]})&&navigator.share){await navigator.share({files:[file]});tell('Audio shared.')}else{tell('This browser cannot share audio files directly. Use Download audio, then attach the file in your messaging app.')}}catch(e){if(e.name!=='AbortError')tell('Could not share this audio. Try Download audio, then attach the file.')}};
+window.addEventListener('pagehide',()=>{if(recording||finishing||requestingMic)cancelRecording()});
 $('back').onclick=()=>{$('editor').hidden=true;$('home').hidden=false;history();scrollTo({top:0,behavior:'instant'})};
 $('useTranscript').onclick=()=>{isExample=$('transcript').value===example;rewrite()};
 $('transcript').oninput=()=>{isExample=$('transcript').value===example;};
@@ -184,7 +202,7 @@ $('editProfile').onclick=()=>editProfile(false);$('addProfile').onclick=()=>edit
 $('profileForm').onsubmit=async e=>{e.preventDefault();const name=$('personName').value.trim();if(!name)return;let p=profiles.find(p=>p.id===editing);if(!p){p={id:uid(),settings:{...settings}};profiles.push(p)}p.name=name;p.notes=$('personNotes').value.trim();
 p.settings={mode:$('defaultMode').value,length:$('defaultLength').value,tone:$('defaultTone').value,focus:$('defaultFocus').value,emoji:$('defaultEmoji').checked,format:$('defaultBullets').checked?'bullets':'paragraph',groupTopics:$('defaultGroup').checked,tangents:$('defaultTangents').checked};
 person=p.id;settings={...p.settings};try{await persist()}catch(err){storageNotice(err)}renderProfiles();renderSettings();rewrite();$('profileDialog').close()};
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&(recording||finishing))resetRecord();if(!document.hidden&&storageOK)prune().then(history).catch(storageNotice)});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&recording)finishRecording();if(!document.hidden&&storageOK)prune().then(history).catch(storageNotice)});
 
 for(const [source,target] of [['tone','defaultTone'],['focus','defaultFocus']]){for(const b of document.querySelectorAll('#'+source+' button')){const o=document.createElement('option');o.value=b.dataset.value;o.textContent=b.textContent;$(target).append(o)}}
 $('saveDefaults').onclick=async()=>{profiles.find(p=>p.id===person).settings={...settings};try{await persist();tell('Style saved for '+profiles.find(p=>p.id===person).name+'.')}catch(e){storageNotice(e)}};
@@ -196,12 +214,13 @@ document.querySelectorAll('.palette').forEach(b=>b.onclick=()=>{$('baseColour').
 </script>
 <script>
 (()=>{
-const fonts={classic:{label:'Classic serif',family:"'Libre Baskerville',Georgia,serif"},elegant:{label:'Script handwriting',family:"'Dancing Script',cursive"},storybook:{label:'Gothic',family:"'UnifrakturCook','Old English Text MT',cursive"},handwritten:{label:'Handwritten',family:"'Caveat',cursive"}};
-let prefs={scale:100,font:''};try{Object.assign(prefs,JSON.parse(localStorage.getItem('summarise-me-appearance')||'{}'))}catch{}
+const fonts={clean:{label:'Clean',family:"'Nunito Sans',Arial,sans-serif"},typewriter:{label:'Typewriter',family:"'Special Elite','Courier New',monospace"},classic:{label:'Classic serif',family:"'Libre Baskerville',Georgia,serif"},elegant:{label:'Script handwriting',family:"'Dancing Script',cursive"},storybook:{label:'Gothic',family:"'UnifrakturCook','Old English Text MT',cursive"},handwritten:{label:'Handwritten',family:"'Caveat',cursive"}};
+let prefs={scale:100,font:'clean'};try{Object.assign(prefs,JSON.parse(localStorage.getItem('summarise-me-appearance')||'{}'))}catch{}
+if(!prefs.font)prefs.font='clean';
 const root=document.documentElement,slider=document.getElementById('textScale'),value=document.getElementById('textScaleValue'),options=document.getElementById('fontOptions');
 function apply(){prefs.scale=Math.max(25,Math.min(400,Number(prefs.scale)||100));root.style.setProperty('--text-scale',prefs.scale/100);slider.value=prefs.scale;value.textContent=prefs.scale+'%';if(fonts[prefs.font]){root.dataset.appFont=prefs.font;root.style.setProperty('--app-font',fonts[prefs.font].family)}else{delete root.dataset.appFont;root.style.removeProperty('--app-font')}options.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.font===prefs.font)));try{localStorage.setItem('summarise-me-appearance',JSON.stringify(prefs))}catch{}}
 for(const [key,font] of Object.entries(fonts)){const b=document.createElement('button');b.type='button';b.className='font-option';b.dataset.font=key;b.style.fontFamily=font.family;b.innerHTML='<span>Aa Mooncakes</span><small>'+font.label+'</small>';b.onclick=()=>{prefs.font=key;apply()};options.append(b)}
-slider.oninput=()=>{prefs.scale=slider.value;apply()};document.getElementById('resetType').onclick=()=>{prefs={scale:100,font:''};apply()};apply();
+slider.oninput=()=>{prefs.scale=slider.value;apply()};document.getElementById('resetType').onclick=()=>{prefs={scale:100,font:'clean'};apply()};apply();
 })();
 </script>
 </body></html>
