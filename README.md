@@ -4,15 +4,15 @@ A way to make voice notes less annoying.
 Live app: https://nikki0radz.github.io/Summarise-me/
 
 ## Recording and audio
-The record button now captures real microphone audio using MediaRecorder over HTTPS. Tap again to finish; Cancel discards the current recording and releases the microphone. Switching away from the tab finishes an active recording; leaving the page cancels it. Permission failures show a visible message.
+The record button now captures real microphone audio using MediaRecorder over HTTPS. A recording dialog provides Pause/Resume, Start again (with discard confirmation), Cancel and Finish. Cancel discards the current recording and releases the microphone. Switching away from the tab pauses an active recording; leaving or reloading the page cancels it. In-progress recordings cannot survive a browser process being killed. Permission failures show a visible message.
 
-Finished recordings have playback, Share audio and Download audio controls. File sharing uses the native share sheet where supported; otherwise the app explains how to download and attach the file manually. Files preserve their recorded MIME format with a matching extension. Saved messages retain their original audio in IndexedDB and can be reopened for playback, sharing and downloading.
+Finished recordings have themed playback and seeking controls, Share audio and Download audio controls. File sharing uses the native share sheet where supported; otherwise the app explains how to download and attach the file manually. Files preserve their recorded MIME format with a matching extension. Saved messages retain their original audio in IndexedDB and can be reopened for playback, sharing and downloading.
 
 ## Current AI boundary
 Transcription and AI summarization are not connected. Real recordings open with a blank transcript and message, rather than an unrelated sample. You may paste a transcript and edit the message manually. Tidy mode can split arbitrary pasted text into paragraphs; automatic topic grouping and rewriting arbitrary text need AI. Earlier saved sample notes still support the prepared demo rewrites.
 
 ## Layout and appearance
-The output and Copy button appear above summary settings on mobile and desktop. App settings contain a proportional 25–400% text-size slider and reset, plus six font previews matching Friend Dossier: Clean (Nunito Sans), Classic serif (Libre Baskerville), Script handwriting (Dancing Script), Typewriter (Special Elite), Gothic (UnifrakturCook), and Handwritten (Caveat). Fonts load from Google Fonts. Appearance choices persist locally. Background/accent pickers and palette presets remain available per light/dark theme.
+The output and Copy button appear above summary settings on mobile and desktop; voice note playback, the full transcript and Save for later appear after settings. Light/dark mode is inside App settings. Recording waves use Web Audio microphone frequency data, without AI; paused waves settle and the active-time timer excludes pauses. App settings contain a proportional 25–400% text-size slider and reset, plus six font previews matching Friend Dossier: Clean (Nunito Sans), Classic serif (Libre Baskerville), Script handwriting (Dancing Script), Typewriter (Special Elite), Gothic (UnifrakturCook), and Handwritten (Caveat). Fonts load from Google Fonts. Appearance choices persist locally. Background/accent pickers and palette presets remain available per light/dark theme.
 
 ## Profiles and storage
 Recipient profiles save defaults for mode, length, tone, focus, emojis, bullets, grouping and tangents. Save style explicitly stores current selections. Written preferences are retained for future AI integration.
