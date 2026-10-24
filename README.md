@@ -1,29 +1,23 @@
 # Summarise-me
-A way to make voicenotes less annoying.
+A way to make voice notes less annoying.
 
-Live draft: https://nikki0radz.github.io/Summarise-me/
+Live app: https://nikki0radz.github.io/Summarise-me/
 
-## Current experience
-Record-first home screen with a large coral microphone button, purple accents, dark mode by default and a remembered light/dark toggle. Saved notes sit beneath recording.
+## Recording and audio
+The record button now captures real microphone audio using MediaRecorder over HTTPS. Tap again to finish; Cancel discards the current recording and releases the microphone. Switching away from the tab finishes an active recording; leaving the page cancels it. Permission failures show a visible message.
 
-Tap Record for a five-second pretend recording with an animated waveform and timer. Tap again to finish early, or Cancel to return home. Completing it opens the existing fictional three-minute transcript and an editable message. No microphone permission is requested and no real audio is captured in this version.
+Finished recordings have playback, Share audio and Download audio controls. File sharing uses the native share sheet where supported; otherwise the app explains how to download and attach the file manually. Files preserve their recorded MIME format with a matching extension. Saved messages retain their original audio in IndexedDB and can be reopened for playback, sharing and downloading.
 
-Recipient, length, tone, focus, emoji, bullet and tangent bubbles stay visible and update the example summary immediately. Try another wording cycles through three prepared variations per configuration. Undo restores the last message, including manual edits. Copy and local saving are supported. Full transcript is in an expandable section.
+## Current AI boundary
+Transcription and AI summarization are not connected. Real recordings open with a blank transcript and message, rather than an unrelated sample. You may paste a transcript and edit the message manually. Tidy mode can split arbitrary pasted text into paragraphs; automatic topic grouping and rewriting arbitrary text need AI. Earlier saved sample notes still support the prepared demo rewrites.
 
-## Local data
-Saved notes and recipient profiles use the same IndexedDB store as the first draft. Existing saved notes and attached audio remain readable. Unkept notes expire seven days after creation and are removed on next app visit/use; Keep preserves until deleted. Data is browser-local, not encrypted, and clearing browser storage removes it. Unsaved drafts are not persisted across reloads. There is no account or app lock.
+## Layout and appearance
+The output and Copy button appear above summary settings on mobile and desktop. App settings contain a proportional 25–400% text-size slider and reset, plus six font previews matching Friend Dossier: Clean (Nunito Sans), Classic serif (Libre Baskerville), Script handwriting (Dancing Script), Typewriter (Special Elite), Gothic (UnifrakturCook), and Handwritten (Caveat). Fonts load from Google Fonts. Appearance choices persist locally. Background/accent pickers and palette presets remain available per light/dark theme.
 
-## Demo boundary
-The sample rewrites are deterministic, not AI-generated. Free-text recipient preferences are retained for future AI integration; the demo uses the profile’s structured settings. Edited custom transcripts can be saved and manually summarized but cannot be automatically rewritten. Real recording, transcription and AI summarization will be connected later. No transcript or audio is uploaded.
+## Profiles and storage
+Recipient profiles save defaults for mode, length, tone, focus, emojis, bullets, grouping and tangents. Save style explicitly stores current selections. Written preferences are retained for future AI integration.
+
+All notes and audio stay in browser-local IndexedDB until you explicitly share or download. Data is not encrypted; clearing browser storage removes it. Unkept notes expire after seven days and are pruned on next app use; Keep retains them until deleted. Unsaved drafts are not persisted across reloads. No account or app lock.
 
 ## Development and validation
-Buildless index.html, published by .github/workflows/pages.yml. Never commit API credentials. Syntax and generator checks passed for wording variants, retained key facts, length and formatting. Browser QA covered simulated recording completion, recipient changes, another wording, theme toggle and local saving.
-
-## Simplified layout and transcript modes
-The home screen has a one-line slogan, a geometrically centred recording button and minimal labels. App colours use a base/accent pair, with per-theme colour pickers and navy/pink, navy/yellow and black/orange presets. Choices persist in localStorage.
-
-Summary tone choices now include Friendly, Playful, Blunt and Thoughtful. Tidy full transcript preserves the complete wording while splitting it into readable paragraphs. Group by topic reorganises the supplied sample into Saturday plans, mug idea, book, dog and closing sections; every sentence is retained. Emoji and bullet choices apply to tidy output too. Try another layout changes paragraph size without rewriting words. The original transcript stays separate.
-
-Recipient Add/Edit forms include explicit defaults for output mode, length, tone, focus, emojis, bullets, grouping and tangents. Save style stores the currently selected bubbles; temporary message changes no longer silently overwrite a recipient’s defaults. Written preferences are saved but will only influence rewriting after AI is connected.
-
-The demo can split pasted text into paragraphs, but automatic topic grouping for arbitrary text still needs AI. All new output is still local and no microphone is used. Validation covered complete sample text preservation, every grouped sentence, alternate layouts, palette switching and adding a recipient with defaults.
+Buildless index.html, published through .github/workflows/pages.yml. Never commit API credentials. JavaScript syntax and DOM checks passed. Mocked runtime checks cover font/scale persistence and reset; microphone start/stop, cancellation, track cleanup, nonempty blobs, sharing, download extensions and unsupported-sharing fallback. Device microphone and native share-sheet testing remain necessary; a local browser executable was unavailable.
