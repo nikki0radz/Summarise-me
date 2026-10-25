@@ -23,3 +23,13 @@ Recorder controls include pause/resume, confirmed discard/restart, finish, and l
 ## Validation
 
 JavaScript syntax and DOM-ID checks passed. Mocked integration checks cover Worker auth, origin checks, input limits, transcription multipart construction, response text extraction, style preferences, error redaction, frontend transcription-to-summary flow and stale-response protection. Actual microphone/share-sheet layout and live OpenAI billing/model access require device and deployed-Worker validation. No live API call was made during preparation.
+
+## Recording parts and recovery
+
+Completed recordings now autosave before transcription, with local timestamps, captured active duration and an array of separate audio parts. Add recording appends another playable/shareable/downloadable part to the same note; its transcript is appended to the existing transcript, then the combined message is regenerated. Parts are not concatenated into one downloadable audio file. Earlier single-blob notes load through a compatibility path; their historical duration may be unknown.
+
+Transcription checkpoints are stored after each part. The progress panel distinguishes transcription from summarisation, supports Pause and exposes Resume after interruption. Completed parts are skipped on resume; a partially uploaded part is retried from its beginning. Manual edits cancel stale AI work. Reload recovery requires successful local storage and reopening the saved note. Unsaved in-progress microphone capture still cannot survive a reload. Save failures are explicitly shown; downloading audio remains available.
+
+Five lengths (Tiny, Short, Medium, Long, Detailed), multi-select vibes, and emoji placement (A few, Scattered throughout, Extra expressive) are passed to AI. Emoji scattering is an instruction to the model, not a guaranteed emoji count. Saved profile editors support selecting multiple tones. Audio cards are compact and separated from summary settings. Home no longer reserves a full viewport of blank space; page canvas and safe-area background follow the active palette. Android/browser-controlled system bars may still impose their own styling.
+
+Additional mocked integration validation covers interrupted follow-up transcription, skip-completed resume, multipart autosave and totals, serialized saves, mixed tones and emoji preferences. Device playback, system bars, and live transcription still need validation in the installed app.
