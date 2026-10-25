@@ -1,0 +1,11 @@
+# Summarise Me — Android preview
+
+Native Android microphone recording runs in a microphone foreground service, with an ongoing notification offering Pause/Resume and Finish. Start recording with the app visible and allow microphone/notification permissions; afterwards it can continue with the screen locked or while another app is open. Force-stop, OS process termination, phone calls, permission revocation or device-specific battery management can still interrupt capture. Test on your actual phone before relying on it for irreplaceable recordings.
+
+The UI is bundled from index.html at build time and served over the reserved HTTPS appassets origin. A native bridge handles AAC/M4A recording, theme/status/navigation bars, sharing and saving to Downloads. Finished native recordings remain in private app storage until the web UI saves their Blob in IndexedDB and acknowledges recovery. No OpenAI key is embedded. Enter your APP_TOKEN again in this app's AI settings; the Worker URL is prefilled. Web browser/PWA data and installed Android data are separate. Existing web notes are not automatically migrated.
+
+Build: GitHub Actions → Build Android app, or install JDK 17, Android SDK 35 and Gradle 8.11.1, copy index.html/icon.svg/manifest.webmanifest to app/src/main/assets/, then `gradle -p android :app:assembleDebug :app:lintDebug` from the repository root. The workflow publishes a debug-signed preview APK to the android-preview prerelease and uploads a build artifact. The debug signing key is cached for preview updates; a cache reset may change the signer, requiring a backup and uninstall before reinstalling. Production distribution needs a private persistent release key.
+
+Native recordings can be longer than the current 24 MB per-part AI upload limit; download large recordings to keep an independent copy. The app does not claim continuous cloud transcription while backgrounded: microphone capture runs natively, and transcription/summary processing resumes in the app when foregrounded.
+
+Notes: Preset editing is in Settings → Style settings; the selected style and last-used controls persist locally. Kept notes have pink hearts and no expiry. Temporary notes expire seven days after their original creation. Opening/returning to the app highlights temporary notes with less than 24 hours left. No scheduled expiry notification is added.
