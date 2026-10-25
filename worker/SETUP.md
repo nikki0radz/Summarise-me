@@ -1,6 +1,8 @@
 # Connect Summarise Me
 
-1. In Cloudflare Workers & Pages, create a Worker named `summarise-me-ai` (the name can differ). Open **Edit code**. Replace the starter code with the complete contents of [worker.mjs](./worker.mjs) and deploy.
+For GitHub-connected deployments: connect this repository, use root `/`, no build command, and deploy command `npx wrangler deploy`. The root wrangler.toml targets the existing `summarise-me` Worker. Secrets must be set on that Worker and deployed to production.
+
+1. In Cloudflare Workers & Pages, create a Worker named `summarise-me` (the name can differ). Open **Edit code**. Replace the starter code with the complete contents of [worker.mjs](./worker.mjs) and deploy.
 2. In that Worker's **Settings → Variables and Secrets**, add two **Secret** values:
    - `OPENAI_API_KEY`: your OpenAI API key. Keep this only in Cloudflare.
    - `APP_TOKEN`: a long random private connection code (at least 32 characters). Choose/generate this privately. This is a different value from your API key.
