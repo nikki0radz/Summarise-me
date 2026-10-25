@@ -320,6 +320,7 @@ document.querySelectorAll('.palette').forEach(b=>b.onclick=()=>{$('baseColour').
 (async()=>{try{db=await openDB();storageOK=true;const saved=await data('readonly',s=>s.get('state'));if(saved){profiles=migrateStylePresets(saved.profiles);notes=saved.notes||[];if(JSON.stringify(profiles)!==JSON.stringify(saved.profiles))await persist()}await prune()}catch(e){storageOK=false;$('save').disabled=true;$('saveStatus').textContent='Browser storage unavailable';}person=profiles[0].id;settings={...profiles[0].settings};renderProfiles();renderSettings();history()})();
 
 let aiConnection={url:'',token:''};try{aiConnection=JSON.parse(localStorage.getItem('summarise-me-ai-connection')||'{}')}catch{}
+if(!aiConnection.url)aiConnection.url='https://summarise-me.nikki0radz.workers.dev';
 let aiController=null,aiGeneration=0,aiTimer=null;
 function aiConnected(){return !!(aiConnection.url&&aiConnection.token)}
 function cancelAIWork(){aiGeneration++;clearTimeout(aiTimer);aiController?.abort();aiController=null;$('again').disabled=false}
