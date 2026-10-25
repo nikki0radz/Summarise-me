@@ -134,7 +134,7 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 </style></head><body>
 <header class="header"><div class="brand"><b class="brand-mark">≋</b>summarise me<span>.</span></div><div class="header-actions"><button class="icon" id="colours" aria-label="App settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 3-.7 2.1-2 .9-2.1-.4-2 3.4 1.4 1.7v2.6L2.7 15l2 3.4 2.1-.4 2 .9.7 2.1h4l.7-2.1 2-.9 2.1.4 2-3.4-1.4-1.7v-2.6L20.3 9l-2-3.4-2.1.4-2-.9-.7-2.1Z"/><circle cx="11.5" cy="12" r="3"/></svg></button></div></header>
 <main>
-<section id="home">
+<section id="home"><button id="updateNotice" type="button" class="chip" hidden style="margin:8px auto">App update available — view</button>
 <div class="home-start">
 <div class="hero"><span class="eyebrow">A little space to spill your thoughts</span><h1>Say it all. <br><em>Send the good bits.</em></h1><p class="sub">For the “quick voice note” that’s never quick.</p><span class="doodle" aria-hidden="true">✳</span><span class="spark" aria-hidden="true">✧</span></div>
 <div class="record-card" id="recordCard"><div class="record-top" hidden><span class="eyebrow" id="recordState"></span><span class="timer" id="timer">00:00</span></div>
@@ -186,7 +186,7 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 <input id="textScale" type="range" min="25" max="400" step="1" value="100">
 <p class="tiny">Tiny to enormous · keeps text proportions</p>
 <label>Font</label><div id="fontOptions" class="font-options" role="group" aria-label="App font"></div>
-<h2 style="margin-top:24px">App colours</h2><div class="form-grid"><div><input type="hidden" id="baseColour"><button class="colour-slot" type="button" data-colour-target="baseColour"><i></i>Background</button></div><div><input type="hidden" id="accentColour"><button class="colour-slot" type="button" data-colour-target="accentColour"><i></i>Accent</button></div></div><section id="styleSettings"><h2>Style settings</h2><div id="people" class="chips"></div><p id="profileHint" class="tiny">Tap a style to edit its defaults.</p><div class="style-tools"><button type="button" id="addProfile">＋ Add style</button><button type="button" id="editProfile" hidden>Edit style</button><button type="button" id="saveDefaults">Save current choices to selected style</button></div></section><section id="connectionPanel" aria-label="AI connection"><h2>AI connection</h2><label for="workerUrl">Cloudflare Worker URL</label><input id="workerUrl" type="url" placeholder="https://summarise-me-ai.your-name.workers.dev" autocomplete="url"><label for="connectionCode">App connection code</label><input id="connectionCode" type="password" autocomplete="off" placeholder="Your APP_TOKEN (not your OpenAI key)"><button type="button" id="connectAI">Save &amp; test connection</button><p id="connectionStatus" role="status"></p><p class="tiny">Recordings are sent to your Worker and OpenAI for transcription when AI is connected.</p></section><button id="installApp" type="button" hidden>Install app</button><div class="actions settings-bottom"><button class="primary" id="closeColours">Done</button><button id="resetType" type="button" class="reset-everything">↺ Reset everything to default</button></div></dialog>
+<h2 style="margin-top:24px">App colours</h2><div class="form-grid"><div><input type="hidden" id="baseColour"><button class="colour-slot" type="button" data-colour-target="baseColour"><i></i>Background</button></div><div><input type="hidden" id="accentColour"><button class="colour-slot" type="button" data-colour-target="accentColour"><i></i>Accent</button></div></div><section id="styleSettings"><h2>Style settings</h2><div id="people" class="chips"></div><p id="profileHint" class="tiny">Tap a style to edit its defaults.</p><div class="style-tools"><button type="button" id="addProfile">＋ Add style</button><button type="button" id="editProfile" hidden>Edit style</button><button type="button" id="saveDefaults">Save current choices to selected style</button></div></section><section id="connectionPanel" aria-label="AI connection"><h2>AI connection</h2><label for="workerUrl">Cloudflare Worker URL</label><input id="workerUrl" type="url" placeholder="https://summarise-me-ai.your-name.workers.dev" autocomplete="url"><label for="connectionCode">App connection code</label><input id="connectionCode" type="password" autocomplete="off" placeholder="Your APP_TOKEN (not your OpenAI key)"><button type="button" id="connectAI">Save &amp; test connection</button><p id="connectionStatus" role="status"></p><p class="tiny">Recordings are sent to your Worker and OpenAI for transcription when AI is connected.</p></section><section id="appUpdates"><h2>App updates</h2><p id="installedVersion" class="tiny"></p><label style="display:flex;align-items:center;gap:10px"><input id="autoUpdates" type="checkbox" style="width:auto"> Automatically check for updates</label><p id="updateStatus" class="tiny" role="status">Check for a new Android version.</p><div class="actions"><button id="checkUpdates" type="button">Check for updates</button><button id="downloadUpdate" type="button" class="primary" hidden>Download update</button></div><p class="tiny">Android will ask you to confirm installation. Your saved notes stay on this device.</p></section><button id="installApp" type="button" hidden>Install app</button><div class="actions settings-bottom"><button class="primary" id="closeColours">Done</button><button id="resetType" type="button" class="reset-everything">↺ Reset everything to default</button></div></dialog>
 <dialog id="colourPickerDialog" aria-labelledby="colourPickerTitle"><div class="settings-top"><h2 id="colourPickerTitle">Background colour</h2><button type="button" id="exitColourPicker" class="icon" aria-label="Discard colour changes and close">✕</button></div><div class="colour-studio"><div class="colour-wheel" id="colourWheel" role="group" aria-label="Hue and saturation colour wheel"><span id="colourCursor" class="colour-cursor"></span></div><div class="colour-preview-row"><i id="colourPreview"></i><input id="colourHex" aria-label="Colour hex code" maxlength="7" spellcheck="false"></div><label for="colourHue">Hue <output id="hueValue"></output></label><input id="colourHue" class="colour-range hue-range" type="range" min="0" max="359"><label for="colourSaturation">Saturation <output id="saturationValue"></output></label><input id="colourSaturation" class="colour-range" type="range" min="0" max="100"><label for="colourBrightness">Brightness <output id="brightnessValue"></output></label><input id="colourBrightness" class="colour-range" type="range" min="0" max="100"><label>Recently used</label><div id="recentColours" class="recent-colours"></div></div><div class="actions"><button type="button" id="discardColour">Discard</button><button type="button" id="saveColour" class="primary">Save colour</button></div></dialog>
 <script>
 const example="Okay, so I’ve had a thought about Saturday. I know we said we’d just get food, but what if we made a little evening of it? There’s that pottery painting place we walked past, and I thought we could go there first and then get dinner afterwards. I haven’t checked if they have spaces, so don’t book anything yet. Honestly, I’ll probably spend half the time deciding what colour to paint a mug. Actually, I saw someone paint one like a tiny strawberry house and now I’m convinced I could do that, even though mine would probably look like a tomato. Anyway, sorry, back to the plan. I can get there from about five, but I need to leave by ten because I’m working early on Sunday. Could you let me know if five works for you? And would you rather do pottery or just dinner? Either is fine, I just thought it might be fun to do something different. Dinner-wise, I’m happy with Italian, but I’m trying not to spend loads, so ideally under thirty pounds each for food. The pottery cost would be separate; I still need to check that. Oh, and I still have your book, by the way. It’s in my bag, so remind me and I’ll bring it. I actually finished it last night. That ending! We need to talk about it, but I won’t spoil anything if you haven’t finished. Also, this is completely unrelated, but I walked past the cutest dog on the way home and it had these tiny little boots on. I don’t know why that was so funny. Right, what I actually need from you is whether Saturday at five is good, and whether you fancy the pottery thing. If you do, I’ll check availability and the price before we commit. Could you tell me by tomorrow evening so I can check? If you’re busy, we can do another day. No pressure. Okay, that’s everything. Probably.";
@@ -416,7 +416,45 @@ const themeClick=get('theme').onclick;get('theme').onclick=()=>{themeClick();con
 })();
 </script><script>
 (()=>{const a=document.getElementById('audio'),play=document.getElementById('playAudio'),seek=document.getElementById('audioSeek'),time=document.getElementById('playbackTime'),duration=document.getElementById('playbackDuration');function stamp(n){if(!Number.isFinite(n)||n<0)return '—';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')}function sync(){const valid=Number.isFinite(a.duration)&&a.duration>0;time.textContent=stamp(a.currentTime||0);duration.textContent=stamp(a.duration);seek.disabled=!valid;seek.value=valid?a.currentTime/a.duration*1000:0;play.textContent=a.paused?'▶':'Ⅱ';play.setAttribute('aria-label',a.paused?'Play voice note':'Pause voice note')}play.onclick=async()=>{if(a.paused){try{await a.play()}catch{time.textContent='Unable to play'}}else a.pause()};seek.oninput=()=>{if(Number.isFinite(a.duration))a.currentTime=Number(seek.value)/1000*a.duration};['loadedmetadata','durationchange','timeupdate','play','pause','ended','emptied'].forEach(e=>a.addEventListener(e,sync));})();
-</script></body></html>
+</script><script>
+(()=>{
+const el=id=>document.getElementById(id), bridge=window.AndroidRecorder;
+const current=bridge&&typeof bridge.versionCode==='function'?Number(bridge.versionCode()):0;
+const key='summarise-me-auto-updates';
+const enabled=()=>localStorage.getItem(key)!=='off';
+el('autoUpdates').checked=enabled();
+el('installedVersion').textContent=current?'Installed version 1.0.'+current:'Website version — Android updates are available here.';
+let checking=false, lastChecked=0;
+async function check(automatic=false){
+ if(checking)return;
+ if(automatic&&(!current||!enabled()||Date.now()-lastChecked<86400000))return;
+ checking=true;el('checkUpdates').disabled=true;el('updateStatus').textContent='Checking for updates…';
+ const controller=new AbortController(), timeout=setTimeout(()=>controller.abort(),15000);
+ try{
+  const response=await fetch('https://api.github.com/repos/nikki0radz/Summarise-me/releases/tags/android-preview',{signal:controller.signal,cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+  if(!response.ok)throw new Error('Check failed');
+  const release=await response.json(), match=(release.body||'').match(/Android build: (\d+)/);
+  const asset=(release.assets||[]).find(a=>a.name==='Summarise-Me.apk');
+  if(!asset||!match)throw new Error('Update information unavailable');
+  const available=Number(match[1])>current;
+  el('updateStatus').textContent=!current?'Latest Android version: 1.0.'+match[1]:available?'Update available: 1.0.'+match[1]:'You’re up to date.';
+  el('downloadUpdate').hidden=!available;
+  el('updateNotice').hidden=!(current&&available);
+  if(current&&available){const gear=document.querySelector('[aria-label="Settings"]');if(gear)gear.setAttribute('title','Update available — open Settings');}
+  lastChecked=Date.now();
+ }catch(error){el('updateStatus').textContent='Couldn’t check for updates. Check your connection and try again.';}
+ finally{clearTimeout(timeout);checking=false;el('checkUpdates').disabled=false;}
+}
+el('updateNotice').onclick=()=>{el('colours').click();el('appUpdates').scrollIntoView({block:'center'});};
+el('checkUpdates').onclick=()=>check();
+el('autoUpdates').onchange=()=>{localStorage.setItem(key,el('autoUpdates').checked?'on':'off');if(enabled())check();};
+el('downloadUpdate').onclick=()=>{if(bridge&&typeof bridge.downloadUpdate==='function')bridge.downloadUpdate();else location.href='https://github.com/nikki0radz/Summarise-me/releases/download/android-preview/Summarise-Me.apk';};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)check(true);});
+check(true);
+})();
+</script>
+</body></html>
+
 
 
 

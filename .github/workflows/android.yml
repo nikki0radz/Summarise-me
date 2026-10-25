@@ -47,3 +47,5 @@ jobs:
         run: |
           gh release view android-preview >/dev/null 2>&1 || gh release create android-preview --title 'Summarise Me for Android — preview' --prerelease --notes 'Installable Android preview with native background microphone recording and notification controls. Allow microphone and notification permissions. Web/PWA notes are stored separately from this Android app. Device testing is still required.'
           gh release upload android-preview Summarise-Me.apk --clobber
+          gh release edit android-preview --notes "Android build: ${GITHUB_RUN_NUMBER}. Native background recording and notification controls. Install this APK over your existing app to keep your saved notes. Android asks you to confirm installation."
+

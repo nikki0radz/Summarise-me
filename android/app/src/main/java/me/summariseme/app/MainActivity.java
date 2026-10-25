@@ -11,6 +11,9 @@ public class MainActivity extends Activity {
  private void launchRecorder(String metadata){if(checkSelfPermission(Manifest.permission.RECORD_AUDIO)!=PackageManager.PERMISSION_GRANTED){RecordingService.setError("Microphone permission is required.");return;}RecordingService.setError("");try{startForegroundService(new Intent(this,RecordingService.class).setAction("begin").putExtra("metadata",metadata));}catch(Exception e){RecordingService.setError("Open the app before starting the microphone.");}}
  @Override public void onRequestPermissionsResult(int request,String[] permissions,int[] grants){super.onRequestPermissionsResult(request,permissions,grants);if(request==7)launchRecorder(pendingMetadata);}
  public class NativeBridge {
+  @JavascriptInterface public int versionCode(){return BuildConfig.VERSION_CODE;}
+  @JavascriptInterface public void downloadUpdate(){runOnUiThread(()->{try{startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://github.com/nikki0radz/Summarise-me/releases/download/android-preview/Summarise-Me.apk")));}catch(Exception e){Toast.makeText(MainActivity.this,"No browser available to download the update",Toast.LENGTH_LONG).show();}});}
+
   @JavascriptInterface public void begin(String metadata){runOnUiThread(()->startRecording(metadata));}
   @JavascriptInterface public void command(String action){if(!Arrays.asList("pause","resume","finish","cancel").contains(action))return;runOnUiThread(()->{try{startService(new Intent(MainActivity.this,RecordingService.class).setAction(action));}catch(Exception ignored){}});}
   @JavascriptInterface public String state(){return RecordingService.snapshot(MainActivity.this);}
@@ -24,3 +27,4 @@ public class MainActivity extends Activity {
  @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);if(request==8&&result==RESULT_OK&&data!=null&&pendingDownload!=null){try(InputStream in=new FileInputStream(pendingDownload);OutputStream out=getContentResolver().openOutputStream(data.getData())){copy(in,out);}catch(Exception ignored){}}}
  @Override public void onBackPressed(){web.evaluateJavascript("(()=>{const dialogs=[...document.querySelectorAll('dialog[open]')];if(dialogs.length){const d=dialogs[dialogs.length-1];const e=new Event('cancel',{cancelable:true});if(d.dispatchEvent(e))d.close();return true}if(!document.getElementById('editor').hidden){document.getElementById('back').click();return true}return false})()",result->{if(!"true".equals(result))moveTaskToBack(true);});}
 }
+
