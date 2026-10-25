@@ -1,23 +1,25 @@
-# Summarise-me
-A way to make voice notes less annoying.
+# Summarise Me
 
 Live app: https://nikki0radz.github.io/Summarise-me/
 
-## Recording and audio
-The record button now captures real microphone audio using MediaRecorder over HTTPS. A recording dialog provides Pause/Resume, Start again (with discard confirmation), Cancel and Finish. Cancel discards the current recording and releases the microphone. Switching away from the tab pauses an active recording; leaving or reloading the page cancels it. In-progress recordings cannot survive a browser process being killed. Permission failures show a visible message.
+## Connect AI
 
-Finished recordings have themed playback and seeking controls, Share audio and Download audio controls. File sharing uses the native share sheet where supported; otherwise the app explains how to download and attach the file manually. Files preserve their recorded MIME format with a matching extension. Saved messages retain their original audio in IndexedDB and can be reopened for playback, sharing and downloading.
+The frontend and Cloudflare Worker are ready. Deployment and secret configuration are still required. Follow [worker/SETUP.md](worker/SETUP.md). Copy [worker/worker.mjs](worker/worker.mjs) into the Cloudflare Worker editor and deploy, then add OPENAI_API_KEY and APP_TOKEN as secrets. Never commit their values. In the app Settings, save the Worker URL and APP_TOKEN connection code. A connection test verifies authentication/configuration without calling a paid model; record a short note to validate real AI afterward.
 
-## Current AI boundary
-Transcription and AI summarization are not connected. Real recordings open with a blank transcript and message, rather than an unrelated sample. You may paste a transcript and edit the message manually. Tidy mode can split arbitrary pasted text into paragraphs; automatic topic grouping and rewriting arbitrary text need AI. Earlier saved sample notes still support the prepared demo rewrites.
+When connected, finishing a recording uploads audio to the Worker/OpenAI for transcription, then generates a message using the selected style. Bubble changes and Try another wording use the AI summary endpoint. Tidy full transcript is prompted to preserve wording. On error the original recording stays available; Retry uses an existing transcript when available. Stale responses cannot overwrite a newer edit or another opened note. API failures do not erase your audio.
 
-## Layout and appearance
-The output and Copy button appear above summary settings on mobile and desktop; voice note playback, the full transcript and Save for later appear after settings. Light/dark mode is inside App settings. Recording waves use Web Audio microphone frequency data, without AI; paused waves settle and the active-time timer excludes pauses. App settings contain a proportional 25–400% text-size slider and reset, plus six font previews matching Friend Dossier: Clean (Nunito Sans), Classic serif (Libre Baskerville), Script handwriting (Dancing Script), Typewriter (Special Elite), Gothic (UnifrakturCook), and Handwritten (Caveat). Fonts load from Google Fonts. Appearance choices persist locally. Background/accent pickers and palette presets remain available per light/dark theme.
+The default transcription model is gpt-transcribe; summary model gpt-4.1-mini. Override using Worker variables if needed. Audio upload maximum is 24 MB; transcript maximum is 120,000 characters. The Worker does not store notes or transcripts; summary requests use store:false. The private connection code protects the endpoint; CORS is restricted to the GitHub Pages origin. No multi-user accounts or cloud note synchronization are added.
 
-## Profiles and storage
-Recipient profiles save defaults for mode, length, tone, focus, emojis, bullets, grouping and tangents. Save style explicitly stores current selections. Written preferences are retained for future AI integration.
+## Install
 
-All notes and audio stay in browser-local IndexedDB until you explicitly share or download. Data is not encrypted; clearing browser storage removes it. Unkept notes expire after seven days and are pruned on next app use; Keep retains them until deleted. Unsaved drafts are not persisted across reloads. No account or app lock.
+The manifest, app icon and service worker make this an installable web app. Android Chrome: menu → Add to home screen / Install app, or the Install app button in Settings when offered. This is not an APK or Play Store build. Navigation uses network first with an offline shell fallback. API requests are never cached. Local notes remain in IndexedDB on this origin. Keep retains notes; otherwise they expire after seven days. Unsaved recordings do not survive reloads.
 
-## Development and validation
-Buildless index.html, published through .github/workflows/pages.yml. Never commit API credentials. JavaScript syntax and DOM checks passed. Mocked runtime checks cover font/scale persistence and reset; microphone start/stop, cancellation, track cleanup, nonempty blobs, sharing, download extensions and unsupported-sharing fallback. Device microphone and native share-sheet testing remain necessary; a local browser executable was unavailable.
+## Settings and recording
+
+Settings and the colour picker have fixed centred viewport shells with vertical-only scrolling and independent control sizing, so large app text cannot expand the modal. The app's text-size setting still affects the main UI. One bottom appearance reset restores font/size, palette and dark mode; it preserves the AI connection and notes. Light and dark modes use one shared accent and a pale-tint counterpart to the background colour.
+
+Recorder controls include pause/resume, confirmed discard/restart, finish, and live microphone-driven waveforms. Backgrounding pauses active capture. Saved audio has themed playback, seeking, native file sharing where supported, and download. Microphone permissions and native sharing vary by browser.
+
+## Validation
+
+JavaScript syntax and DOM-ID checks passed. Mocked integration checks cover Worker auth, origin checks, input limits, transcription multipart construction, response text extraction, style preferences, error redaction, frontend transcription-to-summary flow and stale-response protection. Actual microphone/share-sheet layout and live OpenAI billing/model access require device and deployed-Worker validation. No live API call was made during preparation.
