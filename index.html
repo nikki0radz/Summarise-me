@@ -96,6 +96,18 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 #coloursDialog .settings-bottom{display:flex;flex-direction:column;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
 #coloursDialog .settings-bottom button{width:100%;min-height:44px;padding:12px 16px;font-size:.8125rem;border-radius:13px}
 #coloursDialog .reset-everything{background:var(--panel2);border:1px solid color-mix(in srgb,var(--purple) 40%,var(--line));font-weight:600}
+</style><style>
+#coloursDialog #theme{position:relative;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;min-width:112px;width:112px;height:54px;padding:5px 8px;border-radius:999px;background:var(--panel2);border:1px solid var(--line);overflow:hidden}
+#theme .theme-thumb{position:absolute;top:5px;left:5px;width:44px;height:42px;background:#fff4d4;border-radius:50%;box-shadow:0 2px 7px #0002;transition:transform .3s ease,background .3s ease}
+#theme .theme-sun,#theme .theme-moon{position:relative;display:grid;place-items:center;width:38px;height:38px;flex-shrink:0;z-index:1}
+#theme svg{width:27px;height:27px;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#theme .theme-sun svg{fill:#f9b923;stroke:#d28a0d}
+#theme .theme-moon svg{fill:#25334e;stroke:#25334e}
+#theme[aria-checked=true] .theme-thumb{transform:translateX(56px);background:#c5d0e6}
+#theme[aria-checked=true] .theme-sun{opacity:.55}
+#theme[aria-checked=false] .theme-moon{opacity:.5}
+#theme:hover{transform:none}
+@media(prefers-reduced-motion:reduce){#theme .theme-thumb{transition:none}}
 </style></head><body>
 <header class="header"><div class="brand"><b class="brand-mark">≋</b>summarise me<span>.</span></div><div class="header-actions"><button class="icon" id="colours" aria-label="App settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 3-.7 2.1-2 .9-2.1-.4-2 3.4 1.4 1.7v2.6L2.7 15l2 3.4 2.1-.4 2 .9.7 2.1h4l.7-2.1 2-.9 2.1.4 2-3.4-1.4-1.7v-2.6L20.3 9l-2-3.4-2.1.4-2-.9-.7-2.1Z"/><circle cx="11.5" cy="12" r="3"/></svg></button></div></header>
 <main>
@@ -146,7 +158,7 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 <div class="form-checks"><label><input type="checkbox" id="defaultEmoji">Emojis</label><label><input type="checkbox" id="defaultBullets">Bullet points</label><label><input type="checkbox" id="defaultGroup">Group by topic</label><label><input type="checkbox" id="defaultTangents">Keep tangents in summaries</label></div>
 <p class="tiny">These are their defaults. You can change the bubbles for any message. Written preferences will apply once AI is connected.</p><div class="actions"><button type="button" id="cancelProfile">Cancel</button><button class="primary">Save profile</button></div></form></dialog>
 <dialog id="deleteDialog"><h2>Let this one go?</h2><p class="dialog-copy">This removes the saved note and any attached audio from this browser.</p><div class="actions"><button id="cancelDelete">Keep it</button><button class="primary" id="confirmDelete">Delete note</button></div></dialog>
-<dialog id="coloursDialog" aria-labelledby="settingsTitle"><div class="settings-top"><h2 id="settingsTitle">App settings</h2><button type="button" id="exitSettings" class="icon" aria-label="Close settings">✕</button></div><div class="theme-row"><span>Appearance</span><button id="theme" type="button" aria-label="Switch to light mode">☼</button></div>
+<dialog id="coloursDialog" aria-labelledby="settingsTitle"><div class="settings-top"><h2 id="settingsTitle">App settings</h2><button type="button" id="exitSettings" class="icon" aria-label="Close settings">✕</button></div><div class="theme-row"><span>Appearance</span><button id="theme" type="button" role="switch" aria-checked="true" aria-label="Dark mode"><span class="theme-thumb"></span><span class="theme-sun"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></span><span class="theme-moon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.4 14A8.5 8.5 0 0 1 10 3.6 8.5 8.5 0 1 0 20.4 14Z"/></svg></span></button></div>
 <div class="text-scale-heading"><label for="textScale">Overall text size</label><span class="text-scale-box"><input id="textScaleValue" type="number" inputmode="numeric" min="25" max="400" step="1" value="100" aria-label="Overall text size percentage"><span aria-hidden="true">%</span></span></div>
 <input id="textScale" type="range" min="25" max="400" step="1" value="100">
 <p class="tiny">Tiny to enormous · keeps text proportions</p>
@@ -160,13 +172,15 @@ const $=id=>document.getElementById(id),DAY=86400000,uid=()=>crypto.randomUUID?c
 let profiles=structuredClone(defaults),notes=[],person='pippy',settings={...defaults[0].settings},db=null,storageOK=false,editing=null,deleting=null,recording=false,finishing=false,started=0,ticker=null,autoStop=null,finishTimer=null,version=0,previous=null,loadedId=null,isExample=true,audioBlob=null,audioURL=null;
 function tell(text){$('notice').textContent=text}
 function readTheme(){try{return localStorage.getItem('summarise-me-theme')||'dark'}catch{return'dark'}}
-function theme(value){document.documentElement.dataset.theme=value;$('theme').textContent=value==='dark'?'☾ Dark':'☼ Light';$('theme').setAttribute('aria-label',value==='dark'?'Switch to light mode':'Switch to dark mode');applyColours(value)}
+function theme(value){value=value==='light'?'light':'dark';document.documentElement.dataset.theme=value;$('theme').setAttribute('aria-checked',String(value==='dark'));$('theme').setAttribute('aria-label',value==='dark'?'Dark mode on. Switch to light mode':'Light mode on. Switch to dark mode');applyColours(value)}
 
 function mix(a,b,t){const x=a.match(/\w\w/g).map(v=>parseInt(v,16)),y=b.match(/\w\w/g).map(v=>parseInt(v,16));return '#'+x.map((v,i)=>Math.round(v+(y[i]-v)*t).toString(16).padStart(2,'0')).join('')}
 function contrast(hex){const rgb=hex.slice(1).match(/../g).map(v=>{const n=parseInt(v,16)/255;return n<=.04045?n/12.92:((n+.055)/1.055)**2.4});const lum=rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;return lum>.179?'#111111':'#ffffff'}
-function palette(mode){try{const c=JSON.parse(localStorage.getItem('summarise-me-colours-'+mode));if(/^#[a-f0-9]{6}$/i.test(c?.base)&&/^#[a-f0-9]{6}$/i.test(c?.accent))return c}catch{}return{base:mode==='dark'?'#101b30':'#f3f5f9',accent:mode==='dark'?'#ee759b':'#b53368'}}
-function applyColours(mode){const c=palette(mode),ink=contrast(c.base),root=document.documentElement.style;for(const [k,v] of Object.entries({'--bg':c.base,'--panel':mix(c.base,ink,.035),'--panel2':mix(c.base,ink,.07),'--ink':ink,'--muted':mix(c.base,ink,.68),'--line':mix(c.base,ink,.18),'--purple':c.accent,'--coral':c.accent,'--yellow':c.accent,'--purple-ink':contrast(c.accent)}))root.setProperty(k,v);document.querySelector('meta[name=theme-color]').content=c.base}
-function saveColours(){const mode=document.documentElement.dataset.theme;try{localStorage.setItem('summarise-me-colours-'+mode,JSON.stringify({base:$('baseColour').value,accent:$('accentColour').value}))}catch{}applyColours(mode)}
+function palette(mode){const valid=c=>/^#[a-f0-9]{6}$/i.test(c?.base)&&/^#[a-f0-9]{6}$/i.test(c?.accent);try{const current=JSON.parse(localStorage.getItem('summarise-me-palette-v2'));if(valid(current))return current;const old=['dark','light'].map(m=>JSON.parse(localStorage.getItem('summarise-me-colours-'+m)||'null')).filter(valid);const brightness=c=>c.base.slice(1).match(/../g).reduce((sum,v,i)=>sum+parseInt(v,16)*[.2126,.7152,.0722][i],0);old.sort((a,b)=>brightness(a)-brightness(b));const next=old[0]||{base:'#101b30',accent:'#ee759b'};localStorage.setItem('summarise-me-palette-v2',JSON.stringify(next));return next}catch{}return{base:'#101b30',accent:'#ee759b'}}
+function paintTheme(mode,c){const darkBase=contrast(c.base)==='#ffffff'?c.base:mix(c.base,'#000000',.75),bg=mode==='light'?mix(c.base,'#ffffff',.97):darkBase,ink=mode==='light'?darkBase:'#f4f6fb',root=document.documentElement.style;for(const [k,v] of Object.entries({'--bg':bg,'--panel':mode==='light'?mix(bg,'#ffffff',.6):mix(bg,ink,.035),'--panel2':mix(bg,ink,.07),'--ink':ink,'--muted':mix(bg,ink,.68),'--line':mix(bg,ink,.18),'--purple':c.accent,'--coral':c.accent,'--yellow':c.accent,'--purple-ink':contrast(c.accent)}))root.setProperty(k,v);document.querySelector('meta[name=theme-color]').content=bg}
+function applyColours(mode){paintTheme(mode,palette(mode))}
+function saveColours(){try{localStorage.setItem('summarise-me-palette-v2',JSON.stringify({base:$('baseColour').value,accent:$('accentColour').value}))}catch{}applyColours(document.documentElement.dataset.theme)}
+
 function tidyTranscript(){
 const original=$('transcript').value||example;
 const sentences=(original.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[original]).map(t=>t.trim()).filter(Boolean);
@@ -321,7 +335,7 @@ function hexHsv(hex){const [r,g,b]=hex.slice(1).match(/../g).map(n=>parseInt(n,1
 function dots(){slots.forEach(b=>{b.querySelector('i').style.background=get(b.dataset.colourTarget).value;b.setAttribute('aria-pressed',String(b.dataset.colourTarget===active))})}
 function render(){const colour=hsvHex(hsv.h,hsv.s,hsv.v);hex.value=colour;hue.value=Math.round(hsv.h);sat.value=Math.round(hsv.s);bright.value=Math.round(hsv.v);get('hueValue').textContent=Math.round(hsv.h)+'°';get('saturationValue').textContent=Math.round(hsv.s)+'%';get('brightnessValue').textContent=Math.round(hsv.v)+'%';get('colourPreview').style.background=colour;wheel.style.setProperty('--wheel-darkness',1-hsv.v/100);const angle=hsv.h*Math.PI/180;cursor.style.left=(50+Math.cos(angle)*hsv.s/2)+'%';cursor.style.top=(50+Math.sin(angle)*hsv.s/2)+'%';sat.style.background='linear-gradient(90deg,#fff,'+hsvHex(hsv.h,100,100)+')';bright.style.background='linear-gradient(90deg,#000,'+hsvHex(hsv.h,hsv.s,100)+')';dots()}
 function sync(){hsv=hexHsv(get(active).value);render()}
-function preview(){const c={base:get('baseColour').value,accent:get('accentColour').value};c[active==='baseColour'?'base':'accent']=hsvHex(hsv.h,hsv.s,hsv.v);const ink=contrast(c.base),root=document.documentElement.style;for(const [k,v] of Object.entries({'--bg':c.base,'--panel':mix(c.base,ink,.035),'--panel2':mix(c.base,ink,.07),'--ink':ink,'--muted':mix(c.base,ink,.68),'--line':mix(c.base,ink,.18),'--purple':c.accent,'--coral':c.accent,'--yellow':c.accent,'--purple-ink':contrast(c.accent)}))root.setProperty(k,v)}
+function preview(){const c={base:get('baseColour').value,accent:get('accentColour').value};c[active==='baseColour'?'base':'accent']=hsvHex(hsv.h,hsv.s,hsv.v);paintTheme(document.documentElement.dataset.theme,c)}
 function update(){render();preview()}
 function remember(){const c=get(active).value;recent=[c.toLowerCase(),...recent.filter(x=>x!==c.toLowerCase())].slice(0,12);try{localStorage.setItem('summarise-me-recent-colours',JSON.stringify(recent))}catch{}renderRecent()}
 function renderRecent(){const box=get('recentColours');box.replaceChildren();recent.forEach(c=>{const b=document.createElement('button');b.type='button';b.style.background=c;b.setAttribute('aria-label','Use '+c);b.onclick=()=>{hsv=hexHsv(c);update()};box.append(b)})}
@@ -334,7 +348,7 @@ get('exitSettings').onclick=()=>get('coloursDialog').close();
 get('exitColourPicker').onclick=dismissPicker;get('discardColour').onclick=dismissPicker;
 get('colourPickerDialog').addEventListener('cancel',e=>{e.preventDefault();dismissPicker()});
 get('saveColour').onclick=()=>{get(active).value=hsvHex(hsv.h,hsv.s,hsv.v);saveColours();remember();get('colourPickerDialog').close();dots()};
-document.addEventListener('reset-app-appearance',()=>{try{localStorage.removeItem('summarise-me-colours-dark');localStorage.removeItem('summarise-me-colours-light');localStorage.setItem('summarise-me-theme','dark')}catch{}theme('dark');const c=palette('dark');get('baseColour').value=c.base;get('accentColour').value=c.accent;dots()});
+document.addEventListener('reset-app-appearance',()=>{try{localStorage.removeItem('summarise-me-palette-v2');localStorage.removeItem('summarise-me-colours-dark');localStorage.removeItem('summarise-me-colours-light');localStorage.setItem('summarise-me-theme','dark')}catch{}theme('dark');const c=palette('dark');get('baseColour').value=c.base;get('accentColour').value=c.accent;dots()});
 const themeClick=get('theme').onclick;get('theme').onclick=()=>{themeClick();const c=palette(document.documentElement.dataset.theme);get('baseColour').value=c.base;get('accentColour').value=c.accent;dots()};
 
 })();
