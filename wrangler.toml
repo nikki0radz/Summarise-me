@@ -1,0 +1,8 @@
+name = "summarise-me"
+main = "worker/worker.mjs"
+compatibility_date = "2026-10-25"
+workers_dev = true
+[vars]
+ALLOWED_ORIGIN = "https://nikki0radz.github.io"
+TRANSCRIBE_MODEL = "gpt-transcribe"
+SUMMARY_MODEL = "gpt-4.1-mini"
