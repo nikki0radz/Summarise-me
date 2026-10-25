@@ -68,6 +68,11 @@ html[data-app-font] body,html[data-app-font] button,html[data-app-font] input,ht
 @keyframes inviteGlow{0%,100%{box-shadow:0 0 28px 5px color-mix(in srgb,var(--purple) 30%,transparent),0 0 0 3px color-mix(in srgb,var(--purple) 10%,transparent),inset 0 1px 0 #ffffff45}50%{box-shadow:0 0 85px 24px color-mix(in srgb,var(--purple) 52%,transparent),0 0 0 31px color-mix(in srgb,var(--purple) 12%,transparent),0 0 115px 38px color-mix(in srgb,var(--purple) 15%,transparent),inset 0 1px 0 #ffffff45}}
 #home .record-card:not(.recording) .orb{animation:inviteGlow 2.6s ease-in-out infinite}
 @media(prefers-reduced-motion:reduce){#home .record-card:not(.recording) .orb{animation:none;box-shadow:0 0 42px 10px color-mix(in srgb,var(--purple) 35%,transparent)}}
+</style><style>
+#home .record-card:not(.recording) .orb{isolation:isolate;animation:none;box-shadow:0 0 32px 8px color-mix(in srgb,var(--purple) 24%,transparent),inset 0 1px 0 #ffffff45}
+#home .record-card:not(.recording) .orb::before{content:'';position:absolute;inset:-38px;border-radius:50%;z-index:-1;pointer-events:none;background:radial-gradient(circle,color-mix(in srgb,var(--purple) 30%,transparent) 0%,color-mix(in srgb,var(--purple) 19%,transparent) 40%,color-mix(in srgb,var(--purple) 8%,transparent) 58%,transparent 73%);filter:blur(9px);opacity:.85;transform:scale(.93);animation:gentleRecordBreath 5s cubic-bezier(.45,0,.55,1) infinite}
+@keyframes gentleRecordBreath{0%,100%{transform:scale(.93)}50%{transform:scale(1.18)}}
+@media(prefers-reduced-motion:reduce){#home .record-card:not(.recording) .orb::before{animation:none;transform:scale(1.05)}}
 </style></head><body>
 <header class="header"><div class="brand"><b class="brand-mark">≋</b>summarise me<span>.</span></div><div class="header-actions"><button class="icon" id="colours" aria-label="App settings">⚙</button></div></header>
 <main>
