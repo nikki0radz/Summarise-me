@@ -37,3 +37,9 @@ Additional mocked integration validation covers interrupted follow-up transcript
 ## Length contract
 
 Layout (Summary, Transcript, Bullet points) is independent of length. All modes use source-relative word budgets: Tiny up to 2–3 short sentences (maximum 55 words), Short roughly 18–28%, Medium 40–52%, Long 65–78%, Detailed 88–100%. Short source text is never padded. An off-budget result gets one corrective attempt. Maximum length is enforced afterward; materially under-detailed results are reported for retry instead of silently presenting the same short output. Explicit controls take precedence over saved style prose. With emojis enabled, missing emojis get a corrective attempt and a deterministic placement fallback, while disabled output is not changed by that fallback.
+
+## Expandable controls and output requests
+
+Summary settings and each of its six categories use accessible details/summary expanders, collapsed initially. Extra instructions appear immediately below; Apply request explicitly regenerates the message. Instructions are stored with the note and remembered with the last-used controls, and are included in message/title generation as explicit output restrictions. Excluded content is not reintroduced just to satisfy a word-count minimum. Known no-emoji requests override the emoji fallback. These requests affect generated text and titles only; original audio and raw transcripts are retained. Users should review AI output when anonymity or exclusion matters.
+
+Validation: frontend/Worker syntax and unique IDs; six expandable categories; request transmission and title restrictions; explicit no-emoji override. Android package rebuild is triggered by index.html changes.
