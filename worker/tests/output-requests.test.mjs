@@ -7,7 +7,7 @@ const transcript='So Helena sent me another message today and honestly I am conf
 async function summarise(responses,extraInstructions='Leave out names'){
  const calls=[];
  globalThis.fetch=async(url,init)=>{calls.push(JSON.parse(init.body));assert.ok(responses.length,'Unexpected AI call');const value=responses.shift();return Response.json({output:[{content:[{type:'output_text',text:typeof value==='string'?value:JSON.stringify(value)}]}]})};
- try{const response=await worker.fetch(new Request('https://test/summarise',{method:'POST',headers:{'X-App-Token':'test-token','Content-Type':'application/json'},body:JSON.stringify({transcript,settings:{extraInstructions,length:'medium',tone:['natural','friendly'],emoji:false}})}),env);return{response,body:await response.json(),calls}}finally{globalThis.fetch=originalFetch}
+ try{const response=await worker.fetch(new Request('https://test/summarise',{method:'POST',headers:{'X-App-Token':'test-token','Content-Type':'application/json'},body:JSON.stringify({transcript,settings:{extraInstructions,length:'long',tone:['natural','friendly'],emoji:false}})}),env);return{response,body:await response.json(),calls}}finally{globalThis.fetch=originalFetch}
 }
 const bad={text:'Helena messaged again and I honestly do not know what changed.',title:'Helena messaged again'};
 const good={text:'She messaged again and honestly I am confused. We used to chat, now she barely replies.',title:'Another confusing message'};

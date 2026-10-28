@@ -36,7 +36,7 @@ Additional mocked integration validation covers interrupted follow-up transcript
 
 ## Length contract
 
-Layout (Summary, Transcript, Bullet points) is independent of length. All modes use source-relative word budgets: Tiny up to 2–3 short sentences (maximum 55 words), Short roughly 18–28%, Medium 40–52%, Long 65–78%, Detailed 88–100%. Short source text is never padded. An off-budget result gets one corrective attempt. Maximum length is enforced afterward; materially under-detailed results are reported for retry instead of silently presenting the same short output. Explicit controls take precedence over saved style prose. With emojis enabled, missing emojis get a corrective attempt and a deterministic placement fallback, while disabled output is not changed by that fallback.
+Layout (Summary, Transcript, Bullet points) is independent of length. All modes use source-relative word budgets: Tiny up to 2–3 short sentences (maximum 55 words), Short roughly 12–18%, Medium 18–28%, Long 65–78%, Detailed 88–100%. Short source text is never padded. An off-budget result gets one corrective attempt. Maximum length is enforced afterward; materially under-detailed results are reported for retry instead of silently presenting the same short output. Explicit controls take precedence over saved style prose. With emojis enabled, missing emojis get a corrective attempt and a deterministic placement fallback, while disabled output is not changed by that fallback.
 
 ## Expandable controls and output requests
 
