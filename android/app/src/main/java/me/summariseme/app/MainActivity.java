@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
  }
  private static void copy(InputStream in,OutputStream out)throws IOException{byte[] buffer=new byte[65536];int n;while((n=in.read(buffer))!=-1)out.write(buffer,0,n);}
  @Override protected void onActivityResult(int request,int result,Intent data){super.onActivityResult(request,result,data);if(request==9&&result==RESULT_OK&&data!=null&&data.getData()!=null)queueAudio(data.getData());if(request==8&&result==RESULT_OK&&data!=null&&pendingDownload!=null){try(InputStream in=new FileInputStream(pendingDownload);OutputStream out=getContentResolver().openOutputStream(data.getData())){copy(in,out);}catch(Exception ignored){}}}
- @Override public void onBackPressed(){web.evaluateJavascript("(()=>{const dialogs=[...document.querySelectorAll('dialog[open]')];if(dialogs.length){const d=dialogs[dialogs.length-1];const e=new Event('cancel',{cancelable:true});if(d.dispatchEvent(e))d.close();return true}if(!document.getElementById('editor').hidden){document.getElementById('back').click();return true}return false})()",result->{if(!"true".equals(result))moveTaskToBack(true);});}
+ @Override public void onBackPressed(){web.evaluateJavascript("(()=>{const dialogs=[...document.querySelectorAll('dialog[open]')];if(dialogs.length){const d=dialogs[dialogs.length-1];const e=new Event('cancel',{cancelable:true});if(d.dispatchEvent(e))d.close();return true}if(!document.getElementById('editor').hidden){document.getElementById('back').click();return true}const conversation=document.getElementById('conversationView');if(conversation&&!conversation.hidden){document.getElementById('conversationBack').click();return true}return false})()",result->{if(!"true".equals(result))moveTaskToBack(true);});}
 }
 
 
